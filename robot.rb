@@ -12,16 +12,11 @@ class Robot
   def go
     instructions.each do |instruction|
       case instruction
-      when REGEX_FOR_VALID_PLACEMENT
-        place(instruction)
-      when 'MOVE'
-        move
-      when 'LEFT'
-        turn_left
-      when 'RIGHT'
-        turn_right
-      when 'REPORT'
-        report
+      when REGEX_FOR_VALID_PLACEMENT then place(instruction)
+      when 'MOVE' then move
+      when 'LEFT' then turn('left')
+      when 'RIGHT' then turn('right')
+      when 'REPORT' then report
       end
     end
   end
@@ -44,23 +39,17 @@ class Robot
   end
 
   def place(instruction)
-    capture_groups = instruction.match(REGEX_FOR_VALID_PLACEMENT)&.captures
-
-    return unless capture_groups && capture_groups.size == 3
+    capture_groups = instruction.match(REGEX_FOR_VALID_PLACEMENT).captures
 
     @x, @y, @direction = capture_groups.map.each_with_index { |value, index| index < 2 ? value.to_i : value }
   end
 
   def move
     case direction
-    when 'NORTH'
-      @y += 1 unless y == 5
-    when 'EAST'
-      @x += 1 unless x == 5
-    when 'SOUTH'
-      @y -= 1 unless y.zero?
-    when 'WEST'
-      @x -= 1 unless x.zero?
+    when 'NORTH' then @y += 1 unless y == 5
+    when 'EAST' then @x += 1 unless x == 5
+    when 'SOUTH' then @y -= 1 unless y.zero?
+    when 'WEST' then @x -= 1 unless x.zero?
     end
   end
 
@@ -68,13 +57,10 @@ class Robot
     puts "#{x},#{y},#{direction}"
   end
 
-  def turn_left
+  def turn(left_or_right)
     index_current_direction = DIRECTIONS.index(direction)
-    @direction = DIRECTIONS[(index_current_direction - 1) % 4]
-  end
+    index_new_direction = left_or_right == 'left' ? index_current_direction - 1 : index_current_direction + 1
 
-  def turn_right
-    index_current_direction = DIRECTIONS.index(direction)
-    @direction = DIRECTIONS[(index_current_direction + 1) % 4]
+    @direction = DIRECTIONS[index_new_direction % 4]
   end
 end

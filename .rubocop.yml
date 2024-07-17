@@ -10,8 +10,5 @@ Metrics/BlockLength:
 Style/Documentation:
   Enabled: false
 
-Metrics/MethodLength:
-  Enabled: false
-
 Metrics/CyclomaticComplexity:
   Enabled: false
